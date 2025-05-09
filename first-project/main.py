@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow
+from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QWidget, QPushButton
 from PyQt5.QtGui import QIcon
 
 icon_path = 'C:/Users/Betty/Documents/Py_Projects/images/note_icon.png'
@@ -10,6 +10,30 @@ class MainWIndow(QMainWindow):
         self.setWindowTitle('To do')
         self.setGeometry(100, 100, 600, 500)
         self.setWindowIcon(QIcon(icon_path))
+        self.initUI()
+
+    def initUI(self):
+        self.initButtons()
+        # cental_widget = QWidget()
+        # self.setCentralWidget(cental_widget)
+
+
+    def initButtons(self):
+        buttons = [
+            { 'name': 'C', 'fun': self.on_click }
+        ]
+
+        def createButton(btn):
+            button = QPushButton(btn['name'], self)
+            button.clicked.connect(self.on_click)
+        
+        for btn in buttons:
+            createButton(btn)
+
+        return
+
+    def on_click(self):
+        print('i was clicked')
 
 
 
