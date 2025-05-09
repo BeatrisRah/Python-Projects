@@ -1,12 +1,20 @@
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget
+from PyQt5.QtGui import QIcon
 
 app = QApplication([])
 window = QWidget()
-window.setWindowTitle('My PyQt App')
-window.setGeometry(100, 100, 300, 200)
+window.setWindowTitle('To do')
+window.setGeometry(100, 100, 600, 500)
+
+icon_path = 'C:/Users/Betty/Documents/Py_Projects/images/note_icon.png'
+window.setWindowIcon(QIcon(icon_path))
 
 label = QLabel('Hello, PyQt!', parent=window)
 label.move(100, 80)
 
-window.show()
-app.exec_()
+def main():
+    window.show()
+    app.exec_()
+
+if __name__ == '__main__':
+    main()
