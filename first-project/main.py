@@ -8,7 +8,7 @@ class MainWIndow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('To do')
-        self.setGeometry(100, 100, 600, 500)
+        self.setGeometry(100, 100, 600, 700)
         self.setWindowIcon(QIcon(icon_path))
         self.initUI()
 
@@ -34,9 +34,9 @@ class MainWIndow(QMainWindow):
             { 'name': '1', 'fun': lambda: self.add_input('1') },
             { 'name': '2', 'fun': lambda: self.add_input('2') },
             { 'name': '3', 'fun': lambda: self.add_input('3') },
-            { 'name': '×', 'fun': lambda: self.add_input('+') },
-            { 'name': '×', 'fun': lambda: self.add_input('0') },
-            { 'name': '×', 'fun': lambda: self.add_input('-') },
+            { 'name': '-', 'fun': lambda: self.add_input('+') },
+            { 'name': '0', 'fun': lambda: self.add_input('0') },
+            # { 'name': '×', 'fun': lambda: self.add_input('-') },
 
         ]
 
@@ -48,6 +48,7 @@ class MainWIndow(QMainWindow):
             col = index % 4
             button = QPushButton(btn['name'], self.central_widget)
             button.clicked.connect(btn['fun'])
+            button.setFixedSize(120, 120)
             grid.addWidget(button, row, col)
 
 
