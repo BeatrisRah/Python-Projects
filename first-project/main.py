@@ -69,6 +69,9 @@ class MainWIndow(QMainWindow):
         self.input += input
         self.line_edit.setText(self.input)
 
+    def clear_input(self):
+        self.input = ''
+        self.line_edit.clear()
 
 
 
