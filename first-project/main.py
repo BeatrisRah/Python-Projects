@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QGridLayout, QPushButton, QWidget
+from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QGridLayout, QPushButton, QWidget, QLineEdit,QVBoxLayout
 from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt
 
 icon_path = 'C:/Users/Betty/Documents/Py_Projects/images/note_icon.png'
 
@@ -10,19 +11,27 @@ class MainWIndow(QMainWindow):
         self.setWindowTitle('To do')
         self.setGeometry(100, 100, 600, 700)
         self.setWindowIcon(QIcon(icon_path))
+        self.input = '';
         self.initUI()
 
-        self.input = '';
 
     def initUI(self):
-        self.central_widget = QWidget(self)  # ✅ fixed typo
+        self.central_widget = QWidget(self)
         self.setCentralWidget(self.central_widget)
+
+        self.main_layout = QVBoxLayout()
+        self.central_widget.setLayout(self.main_layout)
+
+        self.line_edit = QLineEdit()
+        self.line_edit.setFixedSize(500, 100)
+        self.main_layout.addWidget(self.line_edit, alignment=Qt.AlignmentFlag.AlignCenter)
+
         self.initButtons()
 
 
     def initButtons(self):
         buttons = [
-            { 'name': 'C', 'fun': self.on_click },
+            { 'name': 'C', 'fun': self.clear_input },
             { 'name': '7', 'fun': lambda: self.add_input('7')},
             { 'name': '8', 'fun': lambda: self.add_input('8') },
             { 'name': '9', 'fun': lambda: self.add_input('9') },
@@ -41,7 +50,8 @@ class MainWIndow(QMainWindow):
         ]
 
         grid = QGridLayout()
-        self.central_widget.setLayout(grid)  
+        # self.central_widget.setLayout(grid)
+
 
         for index, btn in enumerate(buttons):
             row = index // 4 
@@ -50,12 +60,15 @@ class MainWIndow(QMainWindow):
             button.clicked.connect(btn['fun'])
             button.setFixedSize(120, 120)
             grid.addWidget(button, row, col)
-
+        
+        self.main_layout.addLayout(grid)
 
     def on_click(self):
         print('i was clicked')
     def add_input(self, input):
         self.input += input
+        self.line_edit.setText(self.input)
+
 
 
 
