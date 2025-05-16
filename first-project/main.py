@@ -1,9 +1,18 @@
 from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QGridLayout, QPushButton, QWidget, QLineEdit,QVBoxLayout
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
+import ast
+import operator
 
 icon_path = 'C:/Users/Betty/Documents/Py_Projects/images/note_icon.png'
 
+operators = {
+    ast.Add: operator.add,
+    ast.Sub: operator.sub,
+    ast.Mult: operator.mul,
+    ast.Div: operator.truediv,
+    ast.USub: operator.neg
+}
 
 class MainWIndow(QMainWindow):
     def __init__(self):
@@ -11,7 +20,9 @@ class MainWIndow(QMainWindow):
         self.setWindowTitle('To do')
         self.setGeometry(100, 100, 600, 700)
         self.setWindowIcon(QIcon(icon_path))
-        self.input = '';
+        self.inputBox = '';
+        self.inputs = []
+        
         self.initUI()
 
 
@@ -31,21 +42,23 @@ class MainWIndow(QMainWindow):
 
     def initButtons(self):
         buttons = [
-            { 'name': 'C', 'fun': self.clear_input },
-            { 'name': '7', 'fun': lambda: self.add_input('7')},
-            { 'name': '8', 'fun': lambda: self.add_input('8') },
-            { 'name': '9', 'fun': lambda: self.add_input('9') },
-            { 'name': '÷', 'fun': lambda: self.add_input('/') },
-            { 'name': '4', 'fun': lambda: self.add_input('4') },
-            { 'name': '5', 'fun': lambda: self.add_input('5') },
-            { 'name': '6', 'fun': lambda: self.add_input('6') },
-            { 'name': '×', 'fun': lambda: self.add_input('*') },
-            { 'name': '1', 'fun': lambda: self.add_input('1') },
-            { 'name': '2', 'fun': lambda: self.add_input('2') },
-            { 'name': '3', 'fun': lambda: self.add_input('3') },
-            { 'name': '-', 'fun': lambda: self.add_input('+') },
-            { 'name': '0', 'fun': lambda: self.add_input('0') },
-            # { 'name': '×', 'fun': lambda: self.add_input('-') },
+            { 'name': 'C', 'fun': self.clear_inputBox },
+            { 'name': '7', 'fun': lambda: self.add_inputBox('7')},
+            { 'name': '8', 'fun': lambda: self.add_inputBox('8') },
+            { 'name': '9', 'fun': lambda: self.add_inputBox('9') },
+            { 'name': '÷', 'fun': lambda: self.on_operation('/') },
+            { 'name': '4', 'fun': lambda: self.add_inputBox('4') },
+            { 'name': '5', 'fun': lambda: self.add_inputBox('5') },
+            { 'name': '6', 'fun': lambda: self.add_inputBox('6') },
+            { 'name': '×', 'fun': lambda: self.on_operation('*') },
+            { 'name': '1', 'fun': lambda: self.add_inputBox('1') },
+            { 'name': '2', 'fun': lambda: self.add_inputBox('2') },
+            { 'name': '3', 'fun': lambda: self.add_inputBox('3') },
+            { 'name': '+', 'fun': lambda: self.on_operation('+') },
+            { 'name': '-', 'fun': lambda: self.on_operation('-') },
+            { 'name': '=', 'fun': lambda: self.calculate() },
+            { 'name': '0', 'fun': lambda: self.add_inputBox('0') },
+            # { 'name': '×', 'fun': lambda: self.add_inputBox('-') },
 
         ]
 
@@ -63,15 +76,49 @@ class MainWIndow(QMainWindow):
         
         self.main_layout.addLayout(grid)
 
-    def on_click(self):
-        print('i was clicked')
-    def add_input(self, input):
-        self.input += input
-        self.line_edit.setText(self.input)
+    def on_operation(self, method):
 
-    def clear_input(self):
-        self.input = ''
+        if(self.is_input_empty()): return
+        self.inputs.append(self.inputBox)
+        self.inputs.append(method) #! Edje case if user clicks operator but doen't add a new number
+        self.clear_inputBox()
+
+    def calculate(self):
+        if(self.is_input_empty()): return
+        self.inputs.append(self.inputBox)
+
+        def _eval(node):
+            if isinstance(node, ast.Expression):
+                return _eval(node.body)
+            elif isinstance(node, ast.BinOp):
+                return operators[type(node.op)](_eval(node.left), _eval(node.right))
+            elif isinstance(node, ast.UnaryOp):
+                return operators[type(node.op)](_eval(node.operand))
+            elif isinstance(node, ast.Num):  # Python <3.8
+                return node.n
+            elif isinstance(node, ast.Constant):  # Python 3.8+
+                return node.value
+            else:
+                raise TypeError(f"Unsupported type: {type(node)}")
+            
+        stringCalc = ' '.join(self.inputs)
+        parsed = ast.parse(stringCalc, mode='eval')
+
+        self.clear_inputBox()
+        self.line_edit.setText(str(_eval(parsed.body)))
+        self.inputs.clear()
+
+    def add_inputBox(self, input):
+        self.inputBox += input
+        self.line_edit.setText(self.inputBox)
+
+    def clear_inputBox(self):
+        self.inputBox = ''
         self.line_edit.clear()
+    
+    def is_input_empty(self):
+        return True if self.inputBox == '' else False
+        
 
 
 
