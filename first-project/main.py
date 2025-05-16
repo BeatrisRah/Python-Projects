@@ -32,6 +32,7 @@ class MainWIndow(QMainWindow):
 
         self.main_layout = QVBoxLayout()
         self.central_widget.setLayout(self.main_layout)
+        self.central_widget.setStyleSheet('background-color: #282c34;')
 
         self.line_edit = QLineEdit()
         self.line_edit.setFixedSize(500, 100)
@@ -72,6 +73,7 @@ class MainWIndow(QMainWindow):
             button = QPushButton(btn['name'], self.central_widget)
             button.clicked.connect(btn['fun'])
             button.setFixedSize(120, 120)
+            button.setStyleSheet('background-color: #4b515e; color: white; font-size: 16px; font-weight: bold;')
             grid.addWidget(button, row, col)
         
         self.main_layout.addLayout(grid)
