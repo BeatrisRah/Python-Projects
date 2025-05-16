@@ -36,6 +36,7 @@ class MainWIndow(QMainWindow):
 
         self.line_edit = QLineEdit()
         self.line_edit.setFixedSize(500, 100)
+        self.line_edit.setStyleSheet('padding: 8px; color: white; font-size: 16px;')
         self.main_layout.addWidget(self.line_edit, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.initButtons()
