@@ -7,7 +7,7 @@ def create_new_line():
         return
 
     with open('demo.txt', 'a') as text_file:
-        text_file.write(sys.argv[2])
+        text_file.write(sys.argv[2] + '\n')
 
 def read_file():
     with open('demo.txt') as text_file:
