@@ -8,6 +8,7 @@ class TimerWidget(QWidget, Ui_Form):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle('Test Promotimer')
+        self.inint_styling()
         self.init_timer()
         
 
@@ -52,5 +53,15 @@ class TimerWidget(QWidget, Ui_Form):
         self.timer.stop()
         self.timer_running = False
         self.end_time = None
+
+    def inint_styling(self):
+        # self.timer_input.setStyleSheet("font: 75px;")
+        self.timer_input.setObjectName('timer-input')
+        # self.start_button.setStyleSheet()
+        # pass
+
+        with open('style.qss', 'r') as f:
+            _style =  f.read()
+            self.setStyleSheet(_style)
 
 
