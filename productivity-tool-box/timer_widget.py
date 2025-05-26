@@ -8,26 +8,49 @@ class TimerWidget(QWidget, Ui_Form):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle('Test Promotimer')
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.update_time)
-        self.start_button.clicked.connect(self.start_timer)
-        self.end_time = QDateTime.currentDateTime().addSecs(60 * 60)
+        self.init_timer()
+        
 
-    def start_timer(self):
-        self.timer.start(1000)
+    
+    def init_timer(self):
+        self.timer = QTimer(self)
+        self.isTimerOn = False
+
+        self.timer.timeout.connect(self.update_time)
+        self.duration= 60 * 60 
+        #TODO: Add user input for custom timer duration
+        self.remaining_secs = self.duration
+        self.start_button.clicked.connect(self.toggle_timer)
+        self.end_time = None
+
+
+    def toggle_timer(self):
+        if not self.isTimerOn:
+            self.timer.start(1000)
+            self.start_button.setText('Pause')
+            self.isTimerOn = True
+        else:
+            self.timer.stop()
+            self.start_button.setText('Start')
+            self.isTimerOn = False
+
         self.update_time()
+        
 
     def update_time(self):
-        now =QDateTime.currentDateTime()
-        remaining = now.secsTo(self.end_time)
-
-        if(remaining <= 0):
+        
+        if self.isTimerOn:
+            self.remaining_secs -= 1
+        if self.remaining_secs <= 0:
             self.clear_timer()
         else:
-            hours = remaining // 3600
-            min = (remaining % 3600) // 60
-            sec = remaining % 60
-            self.timer_input.setText(f'{hours:02}:{min:02}:{sec:02}')
+            min = (self.remaining_secs % 3600) // 60
+            sec = self.remaining_secs % 60
+            self.timer_input.setText(f'{min:02}:{sec:02}')
     
     def clear_timer(self):
         self.timer.stop()
+        self.timer_running = False
+        self.end_time = None
+
+
