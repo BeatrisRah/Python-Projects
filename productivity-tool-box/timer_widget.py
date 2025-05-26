@@ -55,10 +55,9 @@ class TimerWidget(QWidget, Ui_Form):
         self.end_time = None
 
     def inint_styling(self):
-        # self.timer_input.setStyleSheet("font: 75px;")
         self.timer_input.setObjectName('timer-input')
-        # self.start_button.setStyleSheet()
-        # pass
+        self.label_2.setObjectName('task-label')
+        self.current_task_input.setObjectName('task-input')
 
         with open('style.qss', 'r') as f:
             _style =  f.read()
