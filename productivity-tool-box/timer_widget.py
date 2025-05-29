@@ -19,7 +19,7 @@ class TimerWidget(QWidget, Ui_Form):
         self.isTimerOn = False
 
         self.timer.timeout.connect(self.update_time)
-        self.duration= 60 * 60 
+        self.duration= 60 
         #TODO: Add user input for custom timer duration
         self.remaining_secs = self.duration
         self.start_button.clicked.connect(self.toggle_timer)
@@ -56,6 +56,7 @@ class TimerWidget(QWidget, Ui_Form):
         self.timer_running = False
         self.end_time = None
         self.remaining_secs = self.duration
+        self.start_button.setText('Start')
         self.update_time()
 
     def inint_styling(self):
