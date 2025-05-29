@@ -6,3 +6,8 @@ QLabel#task-input {
     text-align: right;
 }
 
+QFrame {
+    background-color: transparent;
+    border: none;
+}
+
