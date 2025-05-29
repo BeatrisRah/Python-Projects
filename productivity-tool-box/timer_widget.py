@@ -10,6 +10,7 @@ class TimerWidget(QWidget, Ui_Form):
         self.setWindowTitle('Test Promotimer')
         self.inint_styling()
         self.init_timer()
+        self.init_btns()
         
 
     
@@ -50,9 +51,12 @@ class TimerWidget(QWidget, Ui_Form):
             self.timer_input.setText(f'{min:02}:{sec:02}')
     
     def clear_timer(self):
+        self.isTimerOn = False
         self.timer.stop()
         self.timer_running = False
         self.end_time = None
+        self.remaining_secs = self.duration
+        self.update_time()
 
     def inint_styling(self):
         self.timer_input.setObjectName('timer-input')
@@ -63,4 +67,5 @@ class TimerWidget(QWidget, Ui_Form):
             _style =  f.read()
             self.setStyleSheet(_style)
 
-
+    def init_btns(self):
+        self.restart_button.clicked.connect(self.clear_timer)
